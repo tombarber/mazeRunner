@@ -84,51 +84,78 @@ char degreesToTurn(int t) {
         return 'L';
     }
 }
-void simplifyPath() {
-    while ( path_length > 2 && path[path_length - 2] == 'B') {
-        int total = degreesFromTurn(path[path_length-1]) + degreesFromTurn(path[path_length - 2]) + degreesFromTurn(path[path_length - 3]) % 360;
 
+void simplifyPath() {
+
+    while ( path_length > 2 && path[path_length - 2] == 'B') {
+        int total = (degreesFromTurn(path[path_length - 1]) + degreesFromTurn(path[path_length - 2]) + degreesFromTurn(path[path_length - 3])) % 360;
+        
+        //OrangutanLCD::print(total);
+        //delay(4000);
+
+        //OrangutanLCD::clear();
+        //OrangutanLCD::print(degreesToTurn(degreesFromTurn('R')));
         path[path_length - 3] = degreesToTurn(total);
+        path_length = path_length - 2;
+        //OrangutanLCD::gotoXY(0, 1);
+        //OrangutanLCD::print(path);
+        //delay(10000);
     }
 }
 
 void printPath() {
     OrangutanLCD::clear();
-   // OrangutanLCD::gotoXY(0, 0);
-  OrangutanLCD::print(path);
-  delay(1000);
+    //OrangutanLCD::gotoXY(0, 0);
+    OrangutanLCD::print(path);
+
+    //delay(1000);
 }
 
-/* This is the brain of the robot. Everything done within here is
-   what the robot will do after setting up. */
+
+/*  This is the brain of the robot. Everything done within here is
+    what the robot will do after setting up. */
 void loop()
 {
-    // Loop until we have solved the maze.
+    //path[0] = 'R';
+    //path[1] = 'R';
+    //path[2] = 'S';
+    //path[3] = 'B';
+    //path[4] = 'L';
+    //path_length = 5;
     
+    //printPath();
+    //delay(2000);
+
+    //simplifyPath();
+    //printPath();
+    //delay(10000);
+    // Loop until we have solved the maze.
+
     // FIRST MAIN LOOP BODY
     bot.straightUntilIntersection();
-    
+
     bot.directionsAvailable(availableDirs);
 
     while (bot.isEndOfMaze()) {
         bot.stop();
     }
-    
+    printPath();
     delay(200);
 
     path[path_length] = select_turn(availableDirs[0], availableDirs[1], availableDirs[2]);
+    printPath();
     bot.turn(path[path_length]);
     path_length++;
-    
-    //simplifyPath();
+
+    simplifyPath();
 
     printPath();
-    
-    
+
+
 
     delay(200);
-    
+
     // Solved the maze!
 
-    
+
 }
