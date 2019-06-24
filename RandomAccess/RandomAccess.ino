@@ -135,8 +135,8 @@ void trackNewPosition() {
         if (path[path_length] == 'L' || path[path_length] == 'R') {
             movingOnXAxis = !movingOnXAxis;
         }
-        positionsX[path_length] = movingOnXAxis ? distances[path_length] : 0;
-        positionsY[path_length] = !movingOnXAxis ? distances[path_length] : 0;
+        positionsX[path_length] = movingOnXAxis ? distances[path_length] : positionsX[path_length-1];
+        positionsY[path_length] = !movingOnXAxis ? distances[path_length] : positionsY[path_length-1];
     }
 
 }
