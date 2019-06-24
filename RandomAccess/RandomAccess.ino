@@ -19,16 +19,17 @@
  Event created by Aisha Animashaun, Andrew Gillard, Georgia Isaac, Jamie Tizzard and Manav Gupta
 
 */
- straight_max_speed = 60;
-  turning_max_speed = 80;
-  delay_ms = 175;
-  unit_time = 260.0;
+double modifier = 0.5;
+ int straightMaxSpeed = 60;
+     int turningMaxSpeed = 80;
+     int delayMs = 175;
+     double unitTime = 260.0;
 
-  white_threshold = 100;
-  grey_threshold = 200;
-  black_threshold = 600;
+     int whiteThreshold = 100;
+     int greyThreshold = 200;
+     int blackThreshold = 600;
      
-MazeRunner bot = MazeRunner(straight_max_speed, turning_max_speed, delay_ms, unit_time, white_threshold, grey_threshold, black_threshold);
+MazeRunner bot = MazeRunner(straightMaxSpeed, turningMaxSpeed, delayMs, unitTime, whiteThreshold, greyThreshold, blackThreshold);
 
 char path[100] = "";
 unsigned char path_length = 0; // How many turns has the robot done?
