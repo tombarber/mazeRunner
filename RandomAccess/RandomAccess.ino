@@ -19,10 +19,10 @@
  Event created by Aisha Animashaun, Andrew Gillard, Georgia Isaac, Jamie Tizzard and Manav Gupta
 
 */
-double modifier = 0.5;
- int straightMaxSpeed = 60;
-     int turningMaxSpeed = 80;
-     int delayMs = 175;
+double modifier = 1;
+ int straightMaxSpeed = 60 * modifier;
+     int turningMaxSpeed = 80 * modifier;
+     int delayMs = 175 / modifier;
      double unitTime = 260.0;
 
      int whiteThreshold = 100;
@@ -76,11 +76,11 @@ void loop()
         bot.stop();
     }
     
-    delay(1000);
+    delay(200);
 
     bot.turn(select_turn(availableDirs[0], availableDirs[1], availableDirs[2]));
 
-    delay(1000);
+    delay(200);
     
     // Solved the maze!
 
