@@ -10,47 +10,47 @@
 #include <OrangutanBuzzer.h>
 
 /*
-  __  __                 ____                              
- |  \/  | __ _ _______  |  _ \ _   _ _ __  _ __   ___ _ __ 
- | |\/| |/ _` |_  / _ \ | |_) | | | | '_ \| '_ \ / _ \ '__|
- | |  | | (_| |/ /  __/ |  _ <| |_| | | | | | | |  __/ |   
- |_|  |_|\__,_/___\___| |_| \_\\__,_|_| |_|_| |_|\___|_|   
+    __  __                 ____
+    |  \/  | __ _ _______  |  _ \ _   _ _ __  _ __   ___ _ __
+    | |\/| |/ _` |_  / _ \ | |_) | | | | '_ \| '_ \ / _ \ '__|
+    | |  | | (_| |/ /  __/ |  _ <| |_| | | | | | | |  __/ |
+    |_|  |_|\__,_/___\___| |_| \_\\__,_|_| |_|_| |_|\___|_|
 
- Event created by Aisha Animashaun, Andrew Gillard, Georgia Isaac, Jamie Tizzard and Manav Gupta
+    Event created by Aisha Animashaun, Andrew Gillard, Georgia Isaac, Jamie Tizzard and Manav Gupta
 
 */
 double modifier = 1;
- int straightMaxSpeed = 60 * modifier;
-     int turningMaxSpeed = 80 * modifier;
-     int delayMs = 175 / modifier;
-     double unitTime = 260.0;
+int straightMaxSpeed = 60 * modifier;
+int turningMaxSpeed = 80 * modifier;
+int delayMs = 175 / modifier;
+double unitTime = 260.0;
 
-     int whiteThreshold = 100;
-     int greyThreshold = 200;
-     int blackThreshold = 600;
-     
+int whiteThreshold = 100;
+int greyThreshold = 200;
+int blackThreshold = 600;
+
 MazeRunner bot = MazeRunner(straightMaxSpeed, turningMaxSpeed, delayMs, unitTime, whiteThreshold, greyThreshold, blackThreshold);
 
 char path[100] = "";
 unsigned char path_length = 0; // How many turns has the robot done?
 unsigned int availableDirs[3] ;
 
-/* Initializes the 3pi, displays a welcome message, calibrates, 
-   and plays the initial music. */
+/*  Initializes the 3pi, displays a welcome message, calibrates,
+    and plays the initial music. */
 void setup() {
     bot.setupRobot();
 }
 
-/*This function decides which way to turn during the learning phase of
-  maze solving.  It uses the variables found_left, found_straight, and
-  found_right, which indicate whether there is an exit in each of the
-  three directions, applying the "left hand on the wall" strategy. */
+/*  This function decides which way to turn during the learning phase of
+    maze solving.  It uses the variables found_left, found_straight, and
+    found_right, which indicate whether there is an exit in each of the
+    three directions, applying the "left hand on the wall" strategy. */
 char select_turn(unsigned char found_left, unsigned char found_straight, unsigned char found_right)
 {
     // Make a decision about how to turn.  The following code
     // implements a left-hand-on-the-wall strategy, where we always
     // default to left turns first if found.
-    
+
     if (found_left)
         return 'L';
     else if (found_straight)
@@ -61,10 +61,10 @@ char select_turn(unsigned char found_left, unsigned char found_straight, unsigne
         return 'B';
 }
 
-int degreesFromTurn(char c){
+int degreesFromTurn(char c) {
     if (c == 'S') {
         return 0;
-    } else if (c == 'R'){
+    } else if (c == 'R') {
         return 90;
     } else if (c == 'B') {
         return 180;
@@ -74,7 +74,7 @@ int degreesFromTurn(char c){
 }
 
 char degreesToTurn(int t) {
-    if(t == 0) {
+    if (t == 0) {
         return 'S';
     } else if (t == 90) {
         return 'R';
