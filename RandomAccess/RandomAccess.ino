@@ -125,6 +125,10 @@ void replayMaze() {
 void loop()
 {
 
+    //    bot.roundedTurn('L');
+    //    delay(30000);
+    //    bot.roundedTurn('R');
+
     //testPath();
 
     // Loop until we have solved the maze.
@@ -132,28 +136,33 @@ void loop()
     // FIRST MAIN LOOP BODY
     bot.straightUntilIntersection();
 
-    bot.directionsAvailable(availableDirs);
+    if (isReplay) {
+        //bot.directionsAvailableNew(availableDirs);
+        bot.directionsAvailable(availableDirs);
+        // turn and pause if not going straight
+        if(path[path_length] != 'S'){
+            bot.turn(path[path_length]);
+            delay(70);
+        } 
+    } else {
+        bot.directionsAvailable(availableDirs);
 
-    if (bot.isEndOfMaze()) {
-        replayMaze();
-        isReplay = true;
-        path_length = 0;
-        return;
-    }
+        if (bot.isEndOfMaze()) {
+            replayMaze();
+            isReplay = true;
+            path_length = 0;
+            return;
+        }
 
-    printPath();
-    
-
-    if (!isReplay) {
         path[path_length] = select_turn(availableDirs[0], availableDirs[1], availableDirs[2]);
+        bot.turn(path[path_length]);
+        delay(100);
     }
-    printPath();
-    bot.turn(path[path_length]);
-    delay(100);
+
+    
     path_length++;
 
     simplifyPath();
-
     printPath();
 
     // Solved the maze!
