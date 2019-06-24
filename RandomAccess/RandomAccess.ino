@@ -29,6 +29,8 @@ int whiteThreshold = 100;
 int greyThreshold = 200;
 int blackThreshold = 600;
 
+boolean isReplay = false;
+
 MazeRunner bot = MazeRunner(straightMaxSpeed, turningMaxSpeed, delayMs, unitTime, whiteThreshold, greyThreshold, blackThreshold);
 
 char path[100] = "";
@@ -89,7 +91,7 @@ void simplifyPath() {
 
     while ( path_length > 2 && path[path_length - 2] == 'B') {
         int total = (degreesFromTurn(path[path_length - 1]) + degreesFromTurn(path[path_length - 2]) + degreesFromTurn(path[path_length - 3])) % 360;
-        
+
         //OrangutanLCD::print(total);
         //delay(4000);
 
@@ -113,11 +115,26 @@ void printPath() {
     //delay(1000);
 }
 
+void replayMaze() {
+    while (!OrangutanPushbuttons::isPressed(BUTTON_B)) {
+        OrangutanLCD::clear();
+        OrangutanLCD::print("Press B");
+        OrangutanLCD::print("To replay");
+        delay(100);
+    }
 
+    // Always wait for the button to be released so that 3pi doesn't
+    // start moving until your hand is away from it.
+    OrangutanPushbuttons::waitForRelease(BUTTON_B);
+    delay(1000);
+
+
+}
 /*  This is the brain of the robot. Everything done within here is
     what the robot will do after setting up. */
 void loop()
 {
+
     //testPath();
 
     // Loop until we have solved the maze.
@@ -127,13 +144,19 @@ void loop()
 
     bot.directionsAvailable(availableDirs);
 
-    while (bot.isEndOfMaze()) {
-        bot.stop();
+    if (bot.isEndOfMaze()) {
+        replayMaze();
+        isReplay = true;
+        path_length = 0;
+        return;
     }
+
     printPath();
     delay(200);
 
-    path[path_length] = select_turn(availableDirs[0], availableDirs[1], availableDirs[2]);
+    if (!isReplay) {
+        path[path_length] = select_turn(availableDirs[0], availableDirs[1], availableDirs[2]);
+    }
     printPath();
     bot.turn(path[path_length]);
     path_length++;
@@ -156,7 +179,7 @@ void testPath() {
     path[3] = 'B';
     path[4] = 'L';
     path_length = 5;
-    
+
     printPath();
     delay(2000);
 
