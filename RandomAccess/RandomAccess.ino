@@ -96,6 +96,8 @@ void simplifyPath() {
         //OrangutanLCD::clear();
         //OrangutanLCD::print(degreesToTurn(degreesFromTurn('R')));
         path[path_length - 3] = degreesToTurn(total);
+        path[path_length - 2] = ' ';
+        path[path_length - 1] = ' ';
         path_length = path_length - 2;
         //OrangutanLCD::gotoXY(0, 1);
         //OrangutanLCD::print(path);
