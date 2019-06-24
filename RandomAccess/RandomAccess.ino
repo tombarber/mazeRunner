@@ -61,6 +61,7 @@ char select_turn(unsigned char found_left, unsigned char found_straight, unsigne
         return 'R';
     else
         return 'B';
+
 }
 
 int degreesFromTurn(char c) {
@@ -92,27 +93,16 @@ void simplifyPath() {
     while ( path_length > 2 && path[path_length - 2] == 'B') {
         int total = (degreesFromTurn(path[path_length - 1]) + degreesFromTurn(path[path_length - 2]) + degreesFromTurn(path[path_length - 3])) % 360;
 
-        //OrangutanLCD::print(total);
-        //delay(4000);
-
-        //OrangutanLCD::clear();
-        //OrangutanLCD::print(degreesToTurn(degreesFromTurn('R')));
         path[path_length - 3] = degreesToTurn(total);
         path[path_length - 2] = ' ';
         path[path_length - 1] = ' ';
         path_length = path_length - 2;
-        //OrangutanLCD::gotoXY(0, 1);
-        //OrangutanLCD::print(path);
-        //delay(10000);
     }
 }
 
 void printPath() {
     OrangutanLCD::clear();
-    //OrangutanLCD::gotoXY(0, 0);
     OrangutanLCD::print(path);
-
-    //delay(1000);
 }
 
 void replayMaze() {
@@ -152,22 +142,19 @@ void loop()
     }
 
     printPath();
-    delay(200);
+    
 
     if (!isReplay) {
         path[path_length] = select_turn(availableDirs[0], availableDirs[1], availableDirs[2]);
     }
     printPath();
     bot.turn(path[path_length]);
+    delay(100);
     path_length++;
 
     simplifyPath();
 
     printPath();
-
-
-
-    delay(200);
 
     // Solved the maze!
 }
