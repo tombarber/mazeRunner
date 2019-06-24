@@ -150,7 +150,7 @@ void loop()
         // turn and pause if not going straight
         if(path[path_length] != 'S'){
             bot.turn(path[path_length]);
-            delay(70);
+            delay(40);
         } 
     } else {
         bot.directionsAvailable(availableDirs);
