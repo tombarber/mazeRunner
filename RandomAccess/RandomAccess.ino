@@ -109,6 +109,7 @@ void replayMaze() {
     while (!OrangutanPushbuttons::isPressed(BUTTON_B)) {
         OrangutanLCD::clear();
         OrangutanLCD::print("Press B");
+        OrangutanLCD::gotoXY(0, 1);
         OrangutanLCD::print("To replay");
         delay(100);
     }
@@ -139,6 +140,13 @@ void loop()
     if (isReplay) {
         //bot.directionsAvailableNew(availableDirs);
         bot.directionsAvailable(availableDirs);
+
+        while (bot.isEndOfMaze()) {
+            replayMaze();
+            path_length = 0;
+            return;
+        }
+        
         // turn and pause if not going straight
         if(path[path_length] != 'S'){
             bot.turn(path[path_length]);
