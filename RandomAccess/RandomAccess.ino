@@ -35,8 +35,11 @@ MazeRunner bot = MazeRunner(straightMaxSpeed, turningMaxSpeed, delayMs, unitTime
 
 char path[100] = "";
 unsigned int distances[100];
+unsigned int positionsX[100];
+unsigned int positionsY[100];
 unsigned char path_length = 0; // How many turns has the robot done?
 unsigned int availableDirs[3] ;
+boolean movingOnXAxis = true;
 
 /*  Initializes the 3pi, displays a welcome message, calibrates,
     and plays the initial music. */
@@ -122,6 +125,30 @@ void replayMaze() {
 
 
 }
+
+void trackNewPosition() {
+    if (path_length == 0) {
+        positionsX[path_length] = distances[path_length];
+        positionsY[path_length] = 0;
+    }
+    else {
+        if (path[path_length] == 'L' || path[path_length] == 'R') {
+            movingOnXAxis = !movingOnXAxis;
+        }
+        positionsX[path_length] = movingOnXAxis ? distances[path_length] : 0;
+        positionsY[path_length] = !movingOnXAxis ? distances[path_length] : 0;
+    }
+
+}
+
+void printLastDistanceTravelledAndCurrentPosition() {
+    OrangutanLCD::clear();
+    OrangutanLCD::print(distances[path_length]);
+    OrangutanLCD::gotoXY(0, 1);
+    OrangutanLCD::print(positionsX[path_length]);
+    OrangutanLCD::print(",");
+    OrangutanLCD::print(positionsY[path_length]);
+}
 /*  This is the brain of the robot. Everything done within here is
     what the robot will do after setting up. */
 void loop()
@@ -141,9 +168,9 @@ void loop()
 
     // Drive to intersection and store distance
     distances[path_length] = bot.straightUntilIntersection();
-    OrangutanLCD::clear();
-    OrangutanLCD::print(distances[path_length]);
+    trackNewPosition();
 
+    printLastDistanceTravelledAndCurrentPosition();
     if (isReplay) {
         // reset speed
         bot = MazeRunner(straightMaxSpeed, turningMaxSpeed, delayMs, unitTime, whiteThreshold, greyThreshold, blackThreshold);
@@ -183,6 +210,7 @@ void loop()
     printPath();
 
     // Solved the maze!
+
 }
 
 void testPath() {
