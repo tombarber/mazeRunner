@@ -34,6 +34,7 @@ boolean isReplay = false;
 MazeRunner bot = MazeRunner(straightMaxSpeed, turningMaxSpeed, delayMs, unitTime, whiteThreshold, greyThreshold, blackThreshold);
 
 char path[100] = "";
+unsigned int distances[100];
 unsigned char path_length = 0; // How many turns has the robot done?
 unsigned int availableDirs[3] ;
 
@@ -117,7 +118,7 @@ void replayMaze() {
     // Always wait for the button to be released so that 3pi doesn't
     // start moving until your hand is away from it.
     OrangutanPushbuttons::waitForRelease(BUTTON_B);
-    delay(1000);
+    delay(200);
 
 
 }
@@ -126,18 +127,26 @@ void replayMaze() {
 void loop()
 {
 
-    //    bot.roundedTurn('L');
-    //    delay(30000);
-    //    bot.roundedTurn('R');
-
     //testPath();
 
     // Loop until we have solved the maze.
 
-    // FIRST MAIN LOOP BODY
-    bot.straightUntilIntersection();
+    if (isReplay) {
+        // speed up if path is long
+        if (distances[path_length] > 2) {
+            bot = MazeRunner(straightMaxSpeed * 1.3, turningMaxSpeed, delayMs, unitTime, whiteThreshold, greyThreshold, blackThreshold);
+            bot.straightForDistance(distances[path_length]);
+        }
+    }
+
+    // Drive to intersection and store distance
+    distances[path_length] = bot.straightUntilIntersection();
+    OrangutanLCD::clear();
+    OrangutanLCD::print(distances[path_length]);
 
     if (isReplay) {
+        // reset speed
+        bot = MazeRunner(straightMaxSpeed, turningMaxSpeed, delayMs, unitTime, whiteThreshold, greyThreshold, blackThreshold);
         //bot.directionsAvailableNew(availableDirs);
         bot.directionsAvailable(availableDirs);
 
@@ -146,12 +155,12 @@ void loop()
             path_length = 0;
             return;
         }
-        
+
         // turn and pause if not going straight
-        if(path[path_length] != 'S'){
+        if (path[path_length] != 'S') {
             bot.turn(path[path_length]);
             delay(40);
-        } 
+        }
     } else {
         bot.directionsAvailable(availableDirs);
 
@@ -167,7 +176,7 @@ void loop()
         delay(100);
     }
 
-    
+
     path_length++;
 
     simplifyPath();
