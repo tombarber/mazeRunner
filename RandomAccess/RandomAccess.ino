@@ -61,6 +61,44 @@ char select_turn(unsigned char found_left, unsigned char found_straight, unsigne
         return 'B';
 }
 
+int degreesFromTurn(char c){
+    if (c == 'S') {
+        return 0;
+    } else if (c == 'R'){
+        return 90;
+    } else if (c == 'B') {
+        return 180;
+    } else if (c == 'L') {
+        return 270;
+    }
+}
+
+char degreesToTurn(int t) {
+    if(t == 0) {
+        return 'S';
+    } else if (t == 90) {
+        return 'R';
+    } else if (t == 180) {
+        return 'B';
+    } else if (t == 270) {
+        return 'L';
+    }
+}
+void simplifyPath() {
+    while ( path_length > 2 && path[path_length - 2] == 'B') {
+        int total = degreesFromTurn(path[path_length-1]) + degreesFromTurn(path[path_length - 2]) + degreesFromTurn(path[path_length - 3]) % 360;
+
+        path[path_length - 3] = degreesToTurn(total);
+    }
+}
+
+void printPath() {
+    OrangutanLCD::clear();
+   // OrangutanLCD::gotoXY(0, 0);
+  OrangutanLCD::print(path);
+  delay(1000);
+}
+
 /* This is the brain of the robot. Everything done within here is
    what the robot will do after setting up. */
 void loop()
@@ -78,7 +116,15 @@ void loop()
     
     delay(200);
 
-    bot.turn(select_turn(availableDirs[0], availableDirs[1], availableDirs[2]));
+    path[path_length] = select_turn(availableDirs[0], availableDirs[1], availableDirs[2]);
+    bot.turn(path[path_length]);
+    path_length++;
+    
+    //simplifyPath();
+
+    printPath();
+    
+    
 
     delay(200);
     
