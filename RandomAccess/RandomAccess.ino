@@ -118,19 +118,8 @@ void printPath() {
     what the robot will do after setting up. */
 void loop()
 {
-    //path[0] = 'R';
-    //path[1] = 'R';
-    //path[2] = 'S';
-    //path[3] = 'B';
-    //path[4] = 'L';
-    //path_length = 5;
-    
-    //printPath();
-    //delay(2000);
+    //testPath();
 
-    //simplifyPath();
-    //printPath();
-    //delay(10000);
     // Loop until we have solved the maze.
 
     // FIRST MAIN LOOP BODY
@@ -158,6 +147,20 @@ void loop()
     delay(200);
 
     // Solved the maze!
+}
 
+void testPath() {
+    path[0] = 'R';
+    path[1] = 'R';
+    path[2] = 'S';
+    path[3] = 'B';
+    path[4] = 'L';
+    path_length = 5;
+    
+    printPath();
+    delay(2000);
 
+    simplifyPath();
+    printPath();
+    delay(10000);
 }
